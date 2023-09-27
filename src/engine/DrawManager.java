@@ -139,7 +139,7 @@ public final class DrawManager {
 	}
 
 	/**
-	 * First part of the drawing process. Initialize buffers, draws the
+	 * First part of the drawing process. Initialices buffers, draws the
 	 * background and prepares the images.
 	 * 
 	 * @param screen
@@ -175,7 +175,7 @@ public final class DrawManager {
 	}
 
 	/**
-	 * Draws an entity, using the appropriate image.
+	 * Draws an entity, using the apropiate image.
 	 * 
 	 * @param entity
 	 *            Entity to be drawn.
@@ -415,7 +415,41 @@ public final class DrawManager {
 							* 14);
 		}
 	}
+	//Login Screen Name Input
+	public void drawUsernameInput(final Screen screen, final char[] name,
+							  final int nameCharSelected) {
+		String introduceUsernameString = "Username:";
 
+		backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, introduceUsernameString,
+				screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 12);
+
+		// 3 letters name.
+		int positionX = screen.getWidth()
+				/ 2
+				- (fontRegularMetrics.getWidths()[name[0]]
+				+ fontRegularMetrics.getWidths()[name[1]]
+				+ fontRegularMetrics.getWidths()[name[2]]
+				+ fontRegularMetrics.getWidths()[' ']) / 2;
+
+		for (int i = 0; i < 3; i++) {
+			if (i == nameCharSelected)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+
+			positionX += fontRegularMetrics.getWidths()[name[i]] / 2;
+			positionX = i == 0 ? positionX
+					: positionX
+					+ (fontRegularMetrics.getWidths()[name[i - 1]]
+					+ fontRegularMetrics.getWidths()[' ']) / 2;
+
+			backBufferGraphics.drawString(Character.toString(name[i]),
+					positionX,
+					screen.getHeight() / 4 + fontRegularMetrics.getHeight()
+							* 14);
+		}
+	}
 	/**
 	 * Draws basic content of game over screen.
 	 * 

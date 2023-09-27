@@ -268,4 +268,52 @@ public final class FileManager {
 				bufferedWriter.close();
 		}
 	}
+	public Player loadPlayer(char[] name) throws IOException {
+
+		Player player = new Player("AAA", 0);
+		InputStream inputStream = null;
+		BufferedReader bufferedReader = null;
+
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+			String playerPath = new File(jarPath).getParent();
+			playerPath += File.separator;
+			playerPath += "accounts";
+
+			File playerFile = new File(playerPath);
+			inputStream = new FileInputStream(playerFile);
+			bufferedReader = new BufferedReader(new InputStreamReader(
+					inputStream, Charset.forName("UTF-8")));
+
+			logger.info("Loading Account.");
+
+			String loadedName = bufferedReader.readLine();
+			String currency = bufferedReader.readLine();
+
+			while ((name != null) && (currency != null)) {
+				if (loadedName.equals(String.valueOf(name))) {
+					player.setName(loadedName);
+					player.setCurrency(Integer.parseInt(currency));
+					break;
+				}else {
+					loadedName = bufferedReader.readLine();
+					currency = bufferedReader.readLine();
+				}
+			}
+
+
+
+		} catch (FileNotFoundException e) {
+			// loads default if there's no user scores.
+			logger.info("Loading default high scores.");
+		} finally {
+			if (bufferedReader != null)
+				bufferedReader.close();
+		}
+
+		return player;
+	}
 }
