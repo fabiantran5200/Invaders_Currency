@@ -15,6 +15,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -270,7 +271,7 @@ public final class FileManager {
 	}
 	public Player loadPlayer(char[] name) throws IOException {
 
-		Player player = new Player("AAA", 0);
+		Player player = null;
 		InputStream inputStream = null;
 		BufferedReader bufferedReader = null;
 
@@ -293,10 +294,11 @@ public final class FileManager {
 			String loadedName = bufferedReader.readLine();
 			String currency = bufferedReader.readLine();
 
-			while ((name != null) && (currency != null)) {
+			while ((loadedName != null) && (currency != null)) {
 				if (loadedName.equals(String.valueOf(name))) {
-					player.setName(loadedName);
-					player.setCurrency(Integer.parseInt(currency));
+					player = new Player(loadedName, Integer.parseInt(currency));
+					logger.info(String.valueOf(player.getCurrency()));
+
 					break;
 				}else {
 					loadedName = bufferedReader.readLine();
@@ -304,16 +306,48 @@ public final class FileManager {
 				}
 			}
 
-
-
 		} catch (FileNotFoundException e) {
-			// loads default if there's no user scores.
-			logger.info("Loading default high scores.");
+			// create new player if player not found.
+			logger.info("Account list not found.");
 		} finally {
 			if (bufferedReader != null)
 				bufferedReader.close();
 		}
 
 		return player;
+	}
+	public void saveNewPlayer(final char[] name)
+			throws IOException {
+		OutputStream outputStream = null;
+		BufferedWriter bufferedWriter = null;
+
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
+
+			String playerPath = new File(jarPath).getParent();
+			playerPath += File.separator;
+			playerPath += "accounts.txt";
+
+			File playerFile = new File(playerPath);
+
+			playerFile.createNewFile();
+
+			outputStream = new FileOutputStream(playerFile);
+			bufferedWriter = new BufferedWriter(new OutputStreamWriter(
+					outputStream, StandardCharsets.UTF_8));
+
+			logger.info("Creating new user");
+
+				bufferedWriter.write(String.valueOf(name));
+				bufferedWriter.newLine();
+				bufferedWriter.write(0);
+				bufferedWriter.newLine();
+
+		} finally {
+			if (bufferedWriter != null)
+				bufferedWriter.close();
+		}
 	}
 }

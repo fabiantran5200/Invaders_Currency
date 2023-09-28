@@ -67,7 +67,7 @@ public class LoginScreen extends Screen {
 	/**
 	 * Updates the elements on screen and checks for events.
 	 */
-	protected final void update() throws IOException {
+	protected final void update() {
 		super.update();
 
 		draw();
@@ -98,10 +98,16 @@ public class LoginScreen extends Screen {
 					this.selectionCooldown.reset();
 				}
 				if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
+					try {
+						if(Core.getFileManager().loadPlayer(name) == null){
+								Core.getFileManager().saveNewPlayer(name);
+						}
+					} catch (IOException e) {
+						logger.warning("Couldn't load player!");
+					}
 
-					player = Core.getFileManager().loadPlayer(name);
 
-					// Return to main menu.
+					// Proceed to main menu.
 					this.returnCode = 1;
 					this.isRunning = false;
 			}
