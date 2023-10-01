@@ -2,17 +2,7 @@ package engine;
 
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -328,26 +318,74 @@ public final class FileManager {
 
 			String playerPath = new File(jarPath).getParent();
 			playerPath += File.separator;
-			playerPath += "accounts.txt";
+			playerPath += "accounts";
 
 			File playerFile = new File(playerPath);
 
 			playerFile.createNewFile();
 
-			outputStream = new FileOutputStream(playerFile);
 			bufferedWriter = new BufferedWriter(new OutputStreamWriter(
-					outputStream, StandardCharsets.UTF_8));
+					new FileOutputStream(playerFile, true), "UTF-8"));
 
 			logger.info("Creating new user");
 
 				bufferedWriter.write(String.valueOf(name));
 				bufferedWriter.newLine();
-				bufferedWriter.write(0);
+				bufferedWriter.write("0");
 				bufferedWriter.newLine();
+		} finally {
+			if (bufferedWriter != null)
+				bufferedWriter.close();
+		}
+	}
+	public void updateCurrency(final char[] name, int difference)
+			throws IOException {
+		BufferedWriter bufferedWriter = null;
+		BufferedReader bufferedReader =null;
+
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
+
+			String playerPath = new File(jarPath).getParent();
+			playerPath += File.separator;
+			playerPath += "accounts.txt";
+
+			File playerFile = new File(playerPath);
+
+			InputStream inputStream = new FileInputStream(playerFile);
+			bufferedReader = new BufferedReader(new InputStreamReader(
+					inputStream, StandardCharsets.UTF_8));
+
+			StringBuilder inputBuffer = new StringBuilder();
+
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				inputBuffer.append(line);
+				inputBuffer.append('\n');
+			}
+			String inputStr = inputBuffer.toString();
+			System.out.println(inputStr); // display the original file for debugging
+			int newBalance = loadPlayer(name).getCurrency()+difference;
+			inputStr = inputStr.replace(
+					String.valueOf(name)+"\n"+ loadPlayer(name).getCurrency()+"\n",
+					String.valueOf(name)+"\n" + newBalance+"\n");
+			System.out.println("----------------------------------\n" + "current Balance: " +inputStr);
+
+			OutputStream outputStream = new FileOutputStream(playerFile);
+			bufferedWriter = new BufferedWriter(new OutputStreamWriter(
+					outputStream, StandardCharsets.UTF_8));
+
+			outputStream.write(inputStr.getBytes());
+
+			logger.info("Successfully changed amount of player");
 
 		} finally {
 			if (bufferedWriter != null)
 				bufferedWriter.close();
+			if (bufferedReader != null)
+				bufferedReader.close();
 		}
 	}
 }
