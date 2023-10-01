@@ -422,7 +422,7 @@ public final class DrawManager {
 
 		backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen, introduceUsernameString,
-				screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 12);
+				screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 3);
 
 		// 3 letters name.
 		int positionX = screen.getWidth()
@@ -447,7 +447,7 @@ public final class DrawManager {
 			backBufferGraphics.drawString(Character.toString(name[i]),
 					positionX,
 					screen.getHeight() / 4 + fontRegularMetrics.getHeight()
-							* 14);
+							* 6);
 		}
 	}
 	/**
