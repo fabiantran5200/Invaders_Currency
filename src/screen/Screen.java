@@ -1,7 +1,6 @@
 package screen;
 
 import java.awt.Insets;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
