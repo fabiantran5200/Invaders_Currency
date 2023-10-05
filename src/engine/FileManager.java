@@ -6,6 +6,10 @@ import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -262,24 +266,22 @@ public final class FileManager {
 	public Player loadPlayer(char[] name) throws IOException {
 
 		Player player = null;
-		InputStream inputStream = null;
-		BufferedReader bufferedReader = null;
+		int amountOfItems = 0;
 
-		try {
-			String jarPath = FileManager.class.getProtectionDomain()
-					.getCodeSource().getLocation().getPath();
-			jarPath = URLDecoder.decode(jarPath, "UTF-8");
+		String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		jarPath = URLDecoder.decode(jarPath, "UTF-8");
 
-			String playerPath = new File(jarPath).getParent();
-			playerPath += File.separator;
-			playerPath += "accounts";
+		String playerPath = new File(jarPath).getParent() + File.separator + "accounts";
+		String currentPlayerPath = new File(jarPath).getParent() + File.separator + "currentPlayer";
 
-			File playerFile = new File(playerPath);
-			inputStream = new FileInputStream(playerFile);
-			bufferedReader = new BufferedReader(new InputStreamReader(
-					inputStream, Charset.forName("UTF-8")));
+		File playerFile = new File(playerPath);
+		File currentPlayerFile = new File(currentPlayerPath);
+		currentPlayerFile.createNewFile();
 
-			logger.info("Loading Account.");
+
+
+		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(playerFile), Charset.forName("UTF-8")));
+			 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(currentPlayerFile, false), Charset.forName("UTF-8")))) {
 
 			String loadedName = bufferedReader.readLine();
 			String currency = bufferedReader.readLine();
@@ -288,7 +290,15 @@ public final class FileManager {
 				if (loadedName.equals(String.valueOf(name))) {
 					player = new Player(loadedName, Integer.parseInt(currency));
 					logger.info(String.valueOf(player.getCurrency()));
-
+					bufferedWriter.write(loadedName);
+					bufferedWriter.newLine();
+					bufferedWriter.write(currency);
+					bufferedWriter.newLine();
+					for (int i = 0; i < amountOfItems; i++) {
+						bufferedWriter.write(bufferedReader.readLine());
+						bufferedWriter.newLine();
+					}
+					bufferedWriter.flush();
 					break;
 				}else {
 					loadedName = bufferedReader.readLine();
@@ -299,93 +309,74 @@ public final class FileManager {
 		} catch (FileNotFoundException e) {
 			// create new player if player not found.
 			logger.info("Account list not found.");
-		} finally {
-			if (bufferedReader != null)
-				bufferedReader.close();
 		}
 
 		return player;
 	}
-	public void saveNewPlayer(final char[] name)
-			throws IOException {
-		OutputStream outputStream = null;
-		BufferedWriter bufferedWriter = null;
+	public void saveNewPlayer(final char[] name) throws IOException {
+		// Get the path to the JAR file.
+		String jarPath = FileManager.class.getProtectionDomain()
+				.getCodeSource().getLocation().getPath();
+		jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
 
-		try {
-			String jarPath = FileManager.class.getProtectionDomain()
-					.getCodeSource().getLocation().getPath();
-			jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
+		// Construct the path to the player file.
+		Path playerPath = Paths.get(new File(jarPath).getParent(), "accounts");
 
-			String playerPath = new File(jarPath).getParent();
-			playerPath += File.separator;
-			playerPath += "accounts";
+		// Create the player file if it doesn't exist.
+		File playerFile = playerPath.toFile();
+		if (!playerFile.exists() && !playerFile.createNewFile()) {
+			logger.warning("Failed to create new player file at: " + playerPath);
+			return;
+		}
 
-			File playerFile = new File(playerPath);
-
-			playerFile.createNewFile();
-
-			bufferedWriter = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(playerFile, true), "UTF-8"));
-
-			logger.info("Creating new user");
-
-				bufferedWriter.write(String.valueOf(name));
-				bufferedWriter.newLine();
-				bufferedWriter.write("0");
-				bufferedWriter.newLine();
-		} finally {
-			if (bufferedWriter != null)
-				bufferedWriter.close();
+		// Write the new player data to the file.
+		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(playerPath, StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
+			logger.info("Creating new user with name: " + String.valueOf(name));
+			bufferedWriter.write(String.valueOf(name));
+			bufferedWriter.newLine();
+			bufferedWriter.write("0");
+			bufferedWriter.newLine();
+		} catch (IOException e) {
+			logger.warning("Failed to write new player data to file: " + e.getMessage());
+			throw e; // Re-throw the exception after logging it.
 		}
 	}
-	public void updateCurrency(final char[] name, int difference)
-			throws IOException {
-		BufferedWriter bufferedWriter = null;
-		BufferedReader bufferedReader =null;
+	public void updateCurrency(final char[] name, int difference) throws IOException {
+		String jarPath = FileManager.class.getProtectionDomain()
+				.getCodeSource().getLocation().getPath();
+		jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
 
-		try {
-			String jarPath = FileManager.class.getProtectionDomain()
-					.getCodeSource().getLocation().getPath();
-			jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
+		Path playerPath = Paths.get(new File(jarPath).getParent(), "accounts");
+		File playerFile = playerPath.toFile();
 
-			String playerPath = new File(jarPath).getParent();
-			playerPath += File.separator;
-			playerPath += "accounts.txt";
+		if (!playerFile.exists()) {
+			logger.warning("Player file not found at: " + playerPath);
+			return;
+		}
 
-			File playerFile = new File(playerPath);
-
-			InputStream inputStream = new FileInputStream(playerFile);
-			bufferedReader = new BufferedReader(new InputStreamReader(
-					inputStream, StandardCharsets.UTF_8));
-
-			StringBuilder inputBuffer = new StringBuilder();
-
+		StringBuilder inputBuffer = new StringBuilder();
+		try (BufferedReader bufferedReader = Files.newBufferedReader(playerPath, StandardCharsets.UTF_8)) {
 			String line;
 			while ((line = bufferedReader.readLine()) != null) {
-				inputBuffer.append(line);
-				inputBuffer.append('\n');
+				inputBuffer.append(line).append('\n');
 			}
-			String inputStr = inputBuffer.toString();
-			System.out.println(inputStr); // display the original file for debugging
-			int newBalance = loadPlayer(name).getCurrency()+difference;
-			inputStr = inputStr.replace(
-					String.valueOf(name)+"\n"+ loadPlayer(name).getCurrency()+"\n",
-					String.valueOf(name)+"\n" + newBalance+"\n");
-			System.out.println("----------------------------------\n" + "current Balance: " +inputStr);
+		} catch (IOException e) {
+			logger.warning("Failed to read player data from file: " + e.getMessage());
+			throw e;
+		}
 
-			OutputStream outputStream = new FileOutputStream(playerFile);
-			bufferedWriter = new BufferedWriter(new OutputStreamWriter(
-					outputStream, StandardCharsets.UTF_8));
+		Player player = loadPlayer(name);
+		int newBalance = player.getCurrency() + difference;
+		String inputStr = inputBuffer.toString().replace(
+				String.valueOf(name) + "\n" + player.getCurrency() + "\n",
+				String.valueOf(name) + "\n" + newBalance + "\n");
 
-			outputStream.write(inputStr.getBytes());
-
-			logger.info("Successfully changed amount of player");
-
-		} finally {
-			if (bufferedWriter != null)
-				bufferedWriter.close();
-			if (bufferedReader != null)
-				bufferedReader.close();
+		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(playerPath, StandardCharsets.UTF_8)) {
+			bufferedWriter.write(inputStr);
+			logger.info("Successfully changed amount of player: " + String.valueOf(name) + " to " + newBalance);
+		} catch (IOException e) {
+			logger.warning("Failed to write updated player data to file: " + e.getMessage());
+			throw e;
 		}
 	}
 }

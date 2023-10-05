@@ -99,13 +99,16 @@ public class LoginScreen extends Screen {
 				}
 				if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
 					try {
-						if(Core.getFileManager().loadPlayer(name) == null){
-								Core.getFileManager().saveNewPlayer(name);
+						Player loadedPlayer = Core.getFileManager().loadPlayer(name);
+						if(loadedPlayer == null){
+							Core.getFileManager().saveNewPlayer(name);
+							logger.info("New player saved successfully");
+						} else {
+							logger.info("Player loaded successfully");
 						}
 					} catch (IOException e) {
-						logger.warning("Couldn't load player!");
+						logger.warning("Couldn't load or save player! Error: " + e.getMessage());
 					}
-
 
 					// Proceed to main menu.
 					this.returnCode = 1;
@@ -113,30 +116,6 @@ public class LoginScreen extends Screen {
 			}
 		}
 
-	}
-
-	/**
-	 * Shifts the focus to the next menu item.
-	 */
-	private void nextMenuItem() {
-		if (this.returnCode == 3)
-			this.returnCode = 0;
-		else if (this.returnCode == 0)
-			this.returnCode = 2;
-		else
-			this.returnCode++;
-	}
-
-	/**
-	 * Shifts the focus to the previous menu item.
-	 */
-	private void previousMenuItem() {
-		if (this.returnCode == 0)
-			this.returnCode = 3;
-		else if (this.returnCode == 2)
-			this.returnCode = 0;
-		else
-			this.returnCode--;
 	}
 
 	/**
