@@ -14,6 +14,7 @@ import screen.ItemShopScreen;
 import screen.ScoreScreen;
 import screen.Screen;
 import screen.TitleScreen;
+import screen.LoginScreen;
 
 /**
  * Implements core game logic.
@@ -115,11 +116,18 @@ public final class Core {
 		
 		GameState gameState;
 
-		int returnCode = 1;
+		int returnCode = 0;
 		do {
 			gameState = new GameState(1, 0, MAX_LIVES, 0, 0);
 
 			switch (returnCode) {
+				case 0:
+					currentScreen = new LoginScreen(width, height, FPS);LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+						+ " title screen at " + FPS + " fps.");
+					returnCode = frame.setScreen(currentScreen);
+					LOGGER.info("Closing title screen.");
+
+					break;
 			case 1:
 				// Main menu.
 				currentScreen = new TitleScreen(width, height, FPS);
