@@ -341,42 +341,4 @@ public final class FileManager {
 			throw e; // Re-throw the exception after logging it.
 		}
 	}
-	public void updateCurrency(final char[] name, int difference) throws IOException {
-		String jarPath = FileManager.class.getProtectionDomain()
-				.getCodeSource().getLocation().getPath();
-		jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
-
-		Path playerPath = Paths.get(new File(jarPath).getParent(), "accounts");
-		File playerFile = playerPath.toFile();
-
-		if (!playerFile.exists()) {
-			logger.warning("Player file not found at: " + playerPath);
-			return;
-		}
-
-		StringBuilder inputBuffer = new StringBuilder();
-		try (BufferedReader bufferedReader = Files.newBufferedReader(playerPath, StandardCharsets.UTF_8)) {
-			String line;
-			while ((line = bufferedReader.readLine()) != null) {
-				inputBuffer.append(line).append('\n');
-			}
-		} catch (IOException e) {
-			logger.warning("Failed to read player data from file: " + e.getMessage());
-			throw e;
-		}
-
-		Player player = loadPlayer(name);
-		int newBalance = player.getCurrency() + difference;
-		String inputStr = inputBuffer.toString().replace(
-				String.valueOf(name) + "\n" + player.getCurrency() + "\n",
-				String.valueOf(name) + "\n" + newBalance + "\n");
-
-		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(playerPath, StandardCharsets.UTF_8)) {
-			bufferedWriter.write(inputStr);
-			logger.info("Successfully changed amount of player: " + String.valueOf(name) + " to " + newBalance);
-		} catch (IOException e) {
-			logger.warning("Failed to write updated player data to file: " + e.getMessage());
-			throw e;
-		}
-	}
 }
