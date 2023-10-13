@@ -1,7 +1,6 @@
 package engine;
 
 import java.util.Random;
-
 class Enemy {
     private String name;
     private int health;
