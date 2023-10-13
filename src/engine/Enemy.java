@@ -1,28 +1,34 @@
 package engine;
 
-//Enemy
+import java.util.Random;
+
 class Enemy {
     private String name;
     private int health;
-    private int coinsDropped;
+    private int coinDropMin;
+    private int coinDropMax;
 
-    public Enemy(String name, int health, int coinsDropped) {
+    public Enemy(String name, int health, int coinDropMin, int coinDropMax) {
         this.name = name;
         this.health = health;
-        this.coinsDropped = coinsDropped;
+        this.coinDropMin = coinDropMin;
+        this.coinDropMax = coinDropMax;
     }
 
     public boolean isAlive() {
         return health > 0;
     }
 
-    public void takeDamage(int damage) {
-        if (isAlive()) {
-            health -= damage;
-        }
+    public int dropCoins() {
+        Random random = new Random();
+        return random.nextInt(coinDropMax - coinDropMin + 1) + coinDropMin;
     }
 
-    public int dropCoins() {
-        return coinsDropped;
+    public void takeDamage(int damage) {
+        health -= damage;
+    }
+
+    public String getName() {
+        return name;
     }
 }
