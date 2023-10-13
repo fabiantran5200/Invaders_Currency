@@ -49,3 +49,4 @@ public class CoinCollectingGame {
         System.out.println("Game Over. Total gold coins collected: " + player.getCurrency());
     }
 }
+
