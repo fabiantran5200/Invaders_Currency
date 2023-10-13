@@ -23,7 +23,6 @@ import screen.LoginScreen;
  */
 public final class Core {
 
-	private int test = 0;
 	/** Width of current screen. */
 	private static final int WIDTH = 448;
 	/** Height of current screen. */
