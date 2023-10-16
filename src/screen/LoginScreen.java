@@ -13,7 +13,7 @@ import java.io.IOException;
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
  * 
  */
-
+//this code defines the LoginScreen class, which is a user interface screen for player login or account creation.
 public class LoginScreen extends Screen {
 
 	/** Milliseconds between changes in user selection. */
@@ -42,6 +42,7 @@ public class LoginScreen extends Screen {
 	 * @param fps
 	 *            Frames per second, frame rate at which the game is run.
 	 */
+	// It sets up the initial state of the login screen to prepare it for user interaction when the screen is displayed.
 	public LoginScreen(final int width, final int height, final int fps) {
 		super(width, height, fps);
 
@@ -67,6 +68,7 @@ public class LoginScreen extends Screen {
 	/**
 	 * Updates the elements on screen and checks for events.
 	 */
+	//It is responsible for handling user interactions on the login screen.
 	protected final void update() {
 		super.update();
 
@@ -121,6 +123,7 @@ public class LoginScreen extends Screen {
 	/**
 	 * Draws the elements associated with the screen.
 	 */
+	//It initializes the drawing, draws the username input components, and completes the drawing process.
 	private void draw() {
 		drawManager.initDrawing(this);
 		drawManager.drawUsernameInput(this, this.name, this.nameCharSelected);
