@@ -263,6 +263,7 @@ public final class FileManager {
 				bufferedWriter.close();
 		}
 	}
+	//this code is used to load player data. It searches for player information stored in files
 	public Player loadPlayer(char[] name) throws IOException {
 
 		Player player = null;
@@ -313,6 +314,7 @@ public final class FileManager {
 
 		return player;
 	}
+	//this code is used to create a new player record, store it in a file, and assign an initial currency amount.
 	public void saveNewPlayer(final char[] name) throws IOException {
 		// Get the path to the JAR file.
 		String jarPath = FileManager.class.getProtectionDomain()
@@ -343,6 +345,7 @@ public final class FileManager {
 	}
 
 	//Overwrites the content of currentPlayer.txt to accounts.txt.
+	//It ensures that the currency of a player is correctly updated in the player data file.
 	public void updateAccounts() throws IOException {
 		String jarPath = FileManager.class.getProtectionDomain()
 				.getCodeSource().getLocation().getPath();
@@ -394,7 +397,7 @@ public final class FileManager {
 			throw e;
 		}
 	}
-
+//It ensures that the file exists, reads the current currency, updates it, and writes the updated data back to the file.
 	public void updateCurrencyOfCurrentPlayer(int difference) throws IOException {
 		String jarPath = FileManager.class.getProtectionDomain()
 				.getCodeSource().getLocation().getPath();
@@ -433,7 +436,7 @@ public final class FileManager {
 			throw e;
 		}
 	}
-
+//this code is used to read the currency amount of the current player. and returns the currency amount
 	public int getCurrentPlayerCurrency() throws IOException {
 		String jarPath = FileManager.class.getProtectionDomain()
 				.getCodeSource().getLocation().getPath();
