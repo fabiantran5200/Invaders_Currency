@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Logger;
 
 import engine.DrawManager.SpriteType;
@@ -285,15 +288,19 @@ public final class FileManager {
 
 			String loadedName = bufferedReader.readLine();
 			String currency = bufferedReader.readLine();
+			String loginTime = bufferedReader.readLine();
 
-			while ((loadedName != null) && (currency != null)) {
+			while ((loadedName != null) && (currency != null) && (loginTime != null)) {
 				if (loadedName.equals(String.valueOf(name))) {
-					player = new Player(loadedName, Integer.parseInt(currency));
+					player = new Player(loadedName, Integer.parseInt(currency), loginTime);
 					logger.info(String.valueOf(player.getCurrency()));
 					bufferedWriter.write(loadedName);
 					bufferedWriter.newLine();
 					bufferedWriter.write(currency);
 					bufferedWriter.newLine();
+					bufferedWriter.write(loginTime);
+					bufferedWriter.newLine();
+
 					for (int i = 0; i < amountOfItems; i++) {
 						bufferedWriter.write(bufferedReader.readLine());
 						bufferedWriter.newLine();
@@ -303,6 +310,7 @@ public final class FileManager {
 				}else {
 					loadedName = bufferedReader.readLine();
 					currency = bufferedReader.readLine();
+					loginTime = bufferedReader.readLine();
 				}
 			}
 
@@ -335,6 +343,8 @@ public final class FileManager {
 			bufferedWriter.write(String.valueOf(name));
 			bufferedWriter.newLine();
 			bufferedWriter.write("0");
+			bufferedWriter.newLine();
+			bufferedWriter.write(currentDate(name));
 			bufferedWriter.newLine();
 		} catch (IOException e) {
 			logger.warning("Failed to write new player data to file: " + e.getMessage());
@@ -371,20 +381,21 @@ public final class FileManager {
 		try (BufferedReader currentBufferedReader = Files.newBufferedReader(currentPlayerPath, StandardCharsets.UTF_8)) {
 			String loadedName = currentBufferedReader.readLine();
 			String currency = currentBufferedReader.readLine();
+			String loginTime = currentBufferedReader.readLine();
 
-			if (loadedName == null || currency == null) {
+			if (loadedName == null || currency == null || loginTime == null) {
 				logger.warning("Invalid data in current player file");
 				return;
 			}
 
 			Player player = loadPlayer(loadedName.toCharArray());
 			String inputStr = inputBuffer.toString().replace(
-					loadedName + "\n" + player.getCurrency() + "\n",
-					loadedName + "\n" + currency + "\n");
+					loadedName + "\n" + player.getCurrency() + "\n" + player.getLoginTime() + "\n",
+					loadedName + "\n" + currency + "\n" + loginTime + "\n");
 
 			try (BufferedWriter bufferedWriter = Files.newBufferedWriter(playerPath, StandardCharsets.UTF_8)) {
 				bufferedWriter.write(inputStr);
-				logger.info("Successfully changed amount of player: " + loadedName + " to " + currency);
+				logger.info("Successfully changed amount of player: " + loadedName + " to " + currency + "and" + loginTime);
 			} catch (IOException e) {
 				logger.warning("Failed to write updated player data to file: " + e.getMessage());
 				throw e;
@@ -406,9 +417,9 @@ public final class FileManager {
 			logger.warning("Player file not found at: " + playerPath);
 			return;
 		}
-
+		int linesBelongingToAPlayer = 3;
 		List<String> lines = Files.readAllLines(playerPath, StandardCharsets.UTF_8);
-		if (lines.size() < 2) {
+		if (lines.size() < linesBelongingToAPlayer) {
 			logger.warning("Invalid data in current player file");
 			return;
 		}
@@ -447,7 +458,7 @@ public final class FileManager {
 		}
 
 		List<String> lines = Files.readAllLines(playerPath, StandardCharsets.UTF_8);
-		if (lines.size() < 2) {
+		if (lines.size() < 3) {
 			logger.warning("Invalid data in current player file");
 			throw new IOException("Invalid data in current player file");
 		}
@@ -461,5 +472,96 @@ public final class FileManager {
 		}
 
 		return currency;
+	}
+
+
+// Get the player current login time
+	public String currentDate(final char[] name) throws IOException {
+
+		// Write the new player data to the file.
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			return dateFormat.format(new Date());
+
+	}
+	//Logic for updating the login time of current player
+	public void updateLoginTimeOfCurrentPlayer() throws IOException {
+        String jarPath = FileManager.class.getProtectionDomain()
+                .getCodeSource().getLocation().getPath();
+        jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
+
+        Path playerPath = Paths.get(new File(jarPath).getParent(), "currentPlayer");
+
+        if (!Files.exists(playerPath)) {
+            logger.warning("Player file not found at: " + playerPath);
+            return;
+        }
+
+        List<String> lines = Files.readAllLines(playerPath, StandardCharsets.UTF_8);
+        if (lines.size() < 3) {
+            logger.warning("Invalid data in current player file");
+            return;
+        }
+        String loadedName = lines.get(0);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String newDateStr = dateFormat.format(new Date());
+        Date currentDate = null;
+        Date newDate;
+        try {
+            newDate = dateFormat.parse(newDateStr);
+            currentDate = dateFormat.parse(lines.get(2));
+        } catch (ParseException e) {
+            logger.warning("Invalid date value in current player file");
+            return;
+        }
+
+        // Calculate the time difference in milliseconds
+        long timeDifference = (newDate.getTime() - currentDate.getTime());
+
+
+        // Check if the time difference is more than 24 hours (in milliseconds)
+        if (timeDifference > 24 * 60 * 60 * 1000) {
+            // Update the date only if the condition is met
+            lines.set(2, dateFormat.format(newDate));
+
+            try {
+                Files.write(playerPath, lines, StandardCharsets.UTF_8);
+                logger.info("Successfully updated player's date and login bonus: " + loadedName);
+				updateCurrencyOfCurrentPlayer(10);
+            } catch (IOException e) {
+                logger.warning("Failed to write updated player data to file: " + e.getMessage());
+                throw e;
+            }
+        } else {
+            logger.info("Time difference is less than 24 hours, no update is made.");
+        }
+    }
+
+	
+	public Date getCurrentPlayerDate() throws IOException, ParseException {
+		String jarPath = FileManager.class.getProtectionDomain()
+				.getCodeSource().getLocation().getPath();
+		jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
+
+		Path playerPath = Paths.get(new File(jarPath).getParent(), "currentPlayer");
+
+		if (!Files.exists(playerPath)) {
+			logger.warning("Player Time not found at: " + playerPath);
+			throw new FileNotFoundException("Player not found at: " + playerPath);
+		}
+
+		List<String> lines = Files.readAllLines(playerPath, StandardCharsets.UTF_8);
+		if (lines.size() < 3) {
+			logger.warning("Invalid data in current player file");
+			throw new IOException("Invalid data in current player file");
+		}
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date;
+		try {
+			date = dateFormat.parse(lines.get(2));
+		} catch (ParseException e) {
+			logger.warning("Invalid date format in current player file");
+			throw e;
+		}
+		return date;
 	}
 }

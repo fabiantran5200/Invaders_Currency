@@ -18,7 +18,6 @@ public class GameState {
 	private int bulletsShot;
 	/** Ships destroyed until now. */
 	private int shipsDestroyed;
-
 	/**
 	 * Constructor.
 	 * 

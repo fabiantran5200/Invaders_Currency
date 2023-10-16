@@ -338,4 +338,5 @@ public class GameScreen extends Screen {
 		return new GameState(this.level, this.score, this.lives,
 				this.bulletsShot, this.shipsDestroyed);
 	}
+
 }

@@ -36,7 +36,7 @@ public final class Core {
 	private static final int EXTRA_LIFE_FRECUENCY = 3;
 	/** Total number of levels. */
 	private static final int NUM_LEVELS = 7;
-	
+
 	/** Difficulty settings for level 1. */
 	private static final GameSettings SETTINGS_LEVEL_1 =
 			new GameSettings(5, 4, 60, 2000);
@@ -58,7 +58,7 @@ public final class Core {
 	/** Difficulty settings for level 7. */
 	private static final GameSettings SETTINGS_LEVEL_7 =
 			new GameSettings(8, 7, 2, 500);
-	
+
 	/** Frame to draw the screen on. */
 	private static Frame frame;
 	/** Screen currently shown. */
@@ -76,7 +76,7 @@ public final class Core {
 
 	/**
 	 * Test implementation.
-	 * 
+	 *
 	 * @param args
 	 *            Program args, ignored.
 	 */
@@ -86,7 +86,6 @@ public final class Core {
 
 			fileHandler = new FileHandler("log");
 			fileHandler.setFormatter(new MinimalFormatter());
-
 			consoleHandler = new ConsoleHandler();
 			consoleHandler.setFormatter(new MinimalFormatter());
 
@@ -112,7 +111,7 @@ public final class Core {
 		gameSettings.add(SETTINGS_LEVEL_5);
 		gameSettings.add(SETTINGS_LEVEL_6);
 		gameSettings.add(SETTINGS_LEVEL_7);
-		
+
 		GameState gameState;
 
 		int returnCode = 0;
@@ -186,7 +185,11 @@ public final class Core {
 			}
 
 		} while (returnCode != 0);
+		try {
+			getFileManager().updateAccounts();
+		}catch(Exception e){
 
+		}
 		fileHandler.flush();
 		fileHandler.close();
 		System.exit(0);
