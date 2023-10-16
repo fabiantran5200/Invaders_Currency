@@ -249,7 +249,7 @@ public final class Core {
 		try {
 			getFileManager().updateAccounts();
 		}catch(Exception e){
-
+			e.printStackTrace();
 		}
 		fileHandler.flush();
 		fileHandler.close();

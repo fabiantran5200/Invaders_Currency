@@ -818,5 +818,4 @@ public class GameScreen extends Screen {
 			item.setIsGet();
 		}
 	}
-
 }
