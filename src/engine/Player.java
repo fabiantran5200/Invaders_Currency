@@ -54,11 +54,7 @@ public class Player implements Comparable<Player> {
     public void setName(String name) {
         this.name = name;
     }
-    /**
-     * Setter for updating the player's currency points.
-     *
-     * @param currency The new currency points for the player.
-     */
+    //Setter for updating the player's currency points.@param currency The new currency points for the player.
 
     public void setCurrency(int currency) {
         this.currency = currency;
