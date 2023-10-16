@@ -394,13 +394,14 @@ public final class FileManager {
 			throw e;
 		}
 	}
-
+	//Indicates the change in the number of currencies to be updated
 	public void updateCurrencyOfCurrentPlayer(int difference) throws IOException {
 		String jarPath = FileManager.class.getProtectionDomain()
 				.getCodeSource().getLocation().getPath();
 		jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
 
 		Path playerPath = Paths.get(new File(jarPath).getParent(), "currentPlayer");
+		//Contains information about the current player, including name and currency quantity
 
 		if (!Files.exists(playerPath)) {
 			logger.warning("Player file not found at: " + playerPath);
@@ -413,7 +414,7 @@ public final class FileManager {
 			return;
 		}
 
-		String loadedName = lines.get(0);
+		String loadedName = lines.get(0);//Obtain the player's name
 		int currentCurrency;
 		try {
 			currentCurrency = Integer.parseInt(lines.get(1));
@@ -422,18 +423,20 @@ public final class FileManager {
 			return;
 		}
 
-		int newBalance = currentCurrency + difference;
-		lines.set(1, String.valueOf(newBalance));
+		int newBalance = currentCurrency + difference;//Calculate the number of new currencies
+		lines.set(1, String.valueOf(newBalance));//Write the new currency quantity into it
 
 		try {
 			Files.write(playerPath, lines, StandardCharsets.UTF_8);
 			logger.info("Successfully changed amount of player: " + loadedName + " to " + newBalance);
+			//Successfully changed the player's currency count to a new value.
 		} catch (IOException e) {
 			logger.warning("Failed to write updated player data to file: " + e.getMessage());
 			throw e;
 		}
 	}
 
+	//Obtain the current player's currency quantity
 	public int getCurrentPlayerCurrency() throws IOException {
 		String jarPath = FileManager.class.getProtectionDomain()
 				.getCodeSource().getLocation().getPath();
@@ -452,7 +455,7 @@ public final class FileManager {
 			throw new IOException("Invalid data in current player file");
 		}
 
-		int currency;
+		int currency;//Store the player's currency quantity.
 		try {
 			currency = Integer.parseInt(lines.get(1));
 		} catch (NumberFormatException e) {
