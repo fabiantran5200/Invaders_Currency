@@ -38,6 +38,7 @@ public class ScoreScreen extends Screen {
 	 * Current score.
 	 */
 	private int score;
+	//it declares a private integer variable named "coin.
 	private int coin;
 	/**
 	 * Player lives left.
@@ -84,6 +85,7 @@ public class ScoreScreen extends Screen {
 					   final GameState gameState) {
 		super(width, height, fps);
 		this.score = gameState.getScore();
+		//is assigning the value of the "coin" property from the gameState object to the "coin"
 		this.coin = gameState.getCoin();
 		this.livesRemaining = gameState.getLivesRemaining();
 		this.bulletsShot = gameState.getBulletsShot();
@@ -171,6 +173,7 @@ public class ScoreScreen extends Screen {
 	 * Saves the score as a high score.
 	 */
 	private void saveScore() {
+		//add coin
 		highScores.add(new Score(new String(this.name), score, coin));
 		Collections.sort(highScores);
 		if (highScores.size() > MAX_HIGH_SCORE_NUM)
@@ -190,6 +193,7 @@ public class ScoreScreen extends Screen {
 		drawManager.initDrawing(this);
 
 		drawManager.drawGameOver(this, this.inputDelay.checkFinished(), this.isNewRecord);
+		//add coin properties
 		drawManager.drawResults(this, this.score, this.coin, this.livesRemaining, this.shipsDestroyed, (float) this.shipsDestroyed / this.bulletsShot, this.isNewRecord);
 
 		if (this.isNewRecord)
