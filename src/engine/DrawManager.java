@@ -74,6 +74,7 @@ public final class DrawManager {
 	/**
 	 * Sprite types.
 	 */
+	//It provides a convenient and readable way to refer to these types throughout the code.
 	public static enum SpriteType {
 		/**
 		 * Player ship.
@@ -427,7 +428,7 @@ public final class DrawManager {
 							* 14);
 		}
 	}
-
+    // this code is part of a game application's user interface rendering system
 	//Login Screen Name Input
 	public void drawUsernameInput(final Screen screen, final char[] name, final int nameCharSelected) {
 		String introduceUsernameString = "Username:";
@@ -506,6 +507,7 @@ public final class DrawManager {
 	 * @param screen     Screen to draw on.
 	 * @param highScores List of high scores.
 	 */
+	//this code is used to render and display high scores on the screen
 	public void drawHighScores(final Screen screen, final List<Score> highScores) {
 		backBufferGraphics.setColor(Color.WHITE);
 		List<Score> data = new ArrayList<>();//myupdate
@@ -545,6 +547,7 @@ public final class DrawManager {
 	 * @param string String to draw.
 	 * @param height Height of the drawing.
 	 */
+	//this code segment provides a method for drawing a large-centered string on the screen
 	public void drawCenteredBigString(final Screen screen, final String string, final int height) {
 		backBufferGraphics.setFont(fontBig);
 		backBufferGraphics.drawString(string, screen.getWidth() / 2 - fontBigMetrics.stringWidth(string) / 2, height);
