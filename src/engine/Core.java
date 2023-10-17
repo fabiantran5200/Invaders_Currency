@@ -66,8 +66,7 @@ public final class Core {
 	/** Difficulty settings list. */
 	private static List<GameSettings> gameSettings;
 	/** Application logger. */
-	private static final Logger LOGGER = Logger.getLogger(Core.class
-			.getSimpleName());
+	private static final Logger LOGGER = Logger.getLogger(Core.class.getSimpleName());
 	/** Logger handler for printing to disk. */
 	private static Handler fileHandler;
 	/** Logger handler for printing to console. */
@@ -117,12 +116,11 @@ public final class Core {
 
 		int returnCode = 0;
 		do {
-			gameState = new GameState(1, 0, MAX_LIVES, 0, 0);
+			gameState = new GameState(1, 0,0, MAX_LIVES, 0, 0);
 
 			switch (returnCode) {
 				case 0:
-					currentScreen = new LoginScreen(width, height, FPS);LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-						+ " title screen at " + FPS + " fps.");
+					currentScreen = new LoginScreen(width, height, FPS);LOGGER.info("Starting " + WIDTH + "x" + HEIGHT + " title screen at " + FPS + " fps.");
 					returnCode = frame.setScreen(currentScreen);
 					LOGGER.info("Closing title screen.");
 
@@ -130,8 +128,7 @@ public final class Core {
 				case 1:
 					// Main menu.
 					currentScreen = new TitleScreen(width, height, FPS);
-					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-							+ " title screen at " + FPS + " fps.");
+					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT + " title screen at " + FPS + " fps.");
 					returnCode = frame.setScreen(currentScreen);
 					LOGGER.info("Closing title screen.");
 					break;
@@ -140,15 +137,10 @@ public final class Core {
 					// Game & score.
 					do {
 						// One extra live every few levels.
-						boolean bonusLife = gameState.getLevel()
-								% EXTRA_LIFE_FRECUENCY == 0
-								&& gameState.getLivesRemaining() < MAX_LIVES;
+						boolean bonusLife = gameState.getLevel() % EXTRA_LIFE_FRECUENCY == 0 && gameState.getLivesRemaining() < MAX_LIVES;
 
-						currentScreen = new GameScreen(gameState,
-								gameSettings.get(gameState.getLevel() - 1),
-								bonusLife, width, height, FPS);
-						LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-								+ " game screen at " + FPS + " fps.");
+						currentScreen = new GameScreen(gameState, gameSettings.get(gameState.getLevel() - 1), bonusLife, width, height, FPS);
+						LOGGER.info("Starting " + WIDTH + "x" + HEIGHT + " game screen at " + FPS + " fps.");
 						frame.setScreen(currentScreen);
 						LOGGER.info("Closing game screen.");
 
@@ -156,6 +148,7 @@ public final class Core {
 
 						gameState = new GameState(gameState.getLevel() + 1,
 								gameState.getScore(),
+								gameState.getCoin(),//myupdate
 								gameState.getLivesRemaining(),
 								gameState.getBulletsShot(),
 								gameState.getShipsDestroyed());
@@ -166,6 +159,7 @@ public final class Core {
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 							+ " score screen at " + FPS + " fps, with a score of "
 							+ gameState.getScore() + ", "
+							+ gameState.getCoin() + ", "//myupdate
 							+ gameState.getLivesRemaining() + " lives remaining, "
 							+ gameState.getBulletsShot() + " bullets shot and "
 							+ gameState.getShipsDestroyed() + " ships destroyed.");
@@ -176,8 +170,7 @@ public final class Core {
 				case 3:
 					// High scores.
 					currentScreen = new HighScoreScreen(width, height, FPS);
-					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-							+ " high score screen at " + FPS + " fps.");
+					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT + " high score screen at " + FPS + " fps.");
 					returnCode = frame.setScreen(currentScreen);
 					LOGGER.info("Closing high score screen.");
 					break;
@@ -255,8 +248,7 @@ public final class Core {
 	 *            Variation in the cooldown duration.
 	 * @return A new cooldown with variance.
 	 */
-	public static Cooldown getVariableCooldown(final int milliseconds,
-											   final int variance) {
+	public static Cooldown getVariableCooldown(final int milliseconds, final int variance) {
 		return new Cooldown(milliseconds, variance);
 	}
 }
