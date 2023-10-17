@@ -167,6 +167,7 @@ public class GameScreen extends Screen {
 	 *
 	 * @return Next screen code.
 	 */
+	//deals with updating the player's score and coin count based on the number of lives and some predefined constants.
 	public final int run() {
 		super.run();
 
