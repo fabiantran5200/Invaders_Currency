@@ -1,5 +1,9 @@
 package engine;
 
+import java.util.Date;
+
+import java.util.List;
+
 /**
  * Implements a high currency record.
  * 
@@ -12,6 +16,9 @@ public class Player implements Comparable<Player> {
 	private String name;
 	/** currency points. */
 	private int currency;
+	private String loginTime;
+	/** item list */
+	private List<Boolean> item;
 
 	/**
 	 * Constructor.
@@ -21,9 +28,11 @@ public class Player implements Comparable<Player> {
 	 * @param currency
 	 *            Player currency.
 	 */
-	public Player(final String name, final int currency) {
+	public Player(final String name, final int currency, final String loginTime, final List<Boolean> item) {
 		this.name = name;
 		this.currency = currency;
+		this.loginTime = loginTime;
+		this.item = item;
 	}
 
 	/**
@@ -38,10 +47,18 @@ public class Player implements Comparable<Player> {
 	/**
 	 * Getter for the player's currency.
 	 * 
-	 * @return High currency.
+	 * @return currency.
 	 */
 	public final int getCurrency() {
 		return this.currency;
+	}
+
+	public final String getLoginTime() {
+		return this.loginTime;
+	}
+
+	public final List<Boolean> getItem() {
+		return this.item;
 	}
 
 	public void setName(String name) {
@@ -50,6 +67,12 @@ public class Player implements Comparable<Player> {
 
 	public void setCurrency(int currency) {
 		this.currency = currency;
+	}
+
+	public void setLoginTime(String loginTime) {this.loginTime = loginTime;}
+
+	public void setItem(List<Boolean> item) {
+		this.item = item;
 	}
 
 	/**
@@ -61,10 +84,7 @@ public class Player implements Comparable<Player> {
 	 *         smaller, positive if its bigger, zero if its the same.
 	 */
 	@Override
-	public final int compareTo(final Player currency) {
-		int comparison = this.currency < currency.getCurrency() ? 1 : this.currency > currency
-				.getCurrency() ? -1 : 0;
-		return comparison;
+	public int compareTo(Player o) {
+		return 0;
 	}
-
 }
