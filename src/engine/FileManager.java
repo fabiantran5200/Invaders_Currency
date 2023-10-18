@@ -536,7 +536,6 @@ public final class FileManager {
 				if (loadedName.equals(String.valueOf(name))) {
                     List<Boolean> items = convertStringToBooleanList(itemList);
                     player = new Player(loadedName, Integer.parseInt(currency), loginTime, items);
-                    logger.info(String.valueOf(player.getCurrency()));
 					bufferedWriter.write(loadedName);
 					bufferedWriter.newLine();
 					bufferedWriter.write(currency);
