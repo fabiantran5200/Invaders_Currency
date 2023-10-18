@@ -582,7 +582,7 @@ public final class DrawManager {
 		drawCenteredItemInfo(screen, "", screen.getHeight() / 8);
 
 		String[] itemNames = {"Speed", "Additional Health", "Shooting Faster"};
-		int[] itemPrices = {1, 2, 3};
+		int[] itemPrices = {10, 15, 20};
 
 		int startX = screen.getWidth() / 10; // Starting X position for the first item
 		int itemWidth = 100; // Width of each item box

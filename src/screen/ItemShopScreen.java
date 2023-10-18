@@ -15,7 +15,11 @@ import java.util.List;
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
  *
  */
+
+
 public class ItemShopScreen extends Screen {
+
+	private static final int SELECTION_TIME = 100;
 
 	public ItemShopScreen(final int width, final int height, final int fps) {
 		super(width, height, fps);
@@ -39,7 +43,6 @@ public class ItemShopScreen extends Screen {
 	/**
 	 * Updates the elements on screen and checks for events.
 	 */
-	private static final int SELECTION_TIME = 100;
 	private Cooldown selectionCooldown;
 	protected final void update() {
 		super.update();
@@ -54,21 +57,30 @@ public class ItemShopScreen extends Screen {
 				nextMenuItem();
 				this.selectionCooldown.reset();
 			}
-			if (inputManager.isKeyDown(KeyEvent.VK_SPACE))
-				/**try {
-					Player loadedPlayer = Core.getFileManager().loadPlayer(name);
-					if(loadedPlayer == null){
-						Core.getFileManager().saveNewPlayer(name);
-						logger.info("New player saved successfully");
-					} else {
-						logger.info("Player loaded successfully");
-					}
-				} catch (IOException e) {
-					logger.warning("Couldn't load or save player! Error: " + e.getMessage());
-				}**/
+			if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
+				// Determine the selected item
+				int selectedItem = this.returnCode;
+				int itemPrice = 0;
+
+				// Update currency and item based on the selected item
+				if (selectedItem == 0) {
+					itemPrice = 10;
+					logger.info("Player bought Speed item successfully");
+				} else if (selectedItem == 1) {
+					itemPrice = 15;
+					logger.info("Player bought Additional Health item successfully");
+				} else if (selectedItem == 2) {
+					itemPrice = 20;
+					logger.info("Player bought Shooting Speed item successfully");
+				}
+
+			}
+			if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)) {
 				this.isRunning = false;
+			}
 		}
 	}
+
 
 	/**
 	 * Shifts the focus to the next menu item (horizontally).
