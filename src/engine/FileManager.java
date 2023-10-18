@@ -513,7 +513,6 @@ public final class FileManager {
     public Player loadPlayer(char[] name) throws IOException {
 
         Player player = null;
-        int amountOfItems = 0;
 
         String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         jarPath = URLDecoder.decode(jarPath, "UTF-8");
@@ -525,26 +524,26 @@ public final class FileManager {
         File currentPlayerFile = new File(currentPlayerPath);
         currentPlayerFile.createNewFile();
 
-
-
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(playerFile), Charset.forName("UTF-8")));
              BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(currentPlayerFile, false), Charset.forName("UTF-8")))) {
 
             String loadedName = bufferedReader.readLine();
             String currency = bufferedReader.readLine();
+			String itemList = bufferedReader.readLine();
 
-            while ((loadedName != null) && (currency != null)) {
+
+            while ((loadedName != null) && (currency != null) && (itemList != null)) {
                 if (loadedName.equals(String.valueOf(name))) {
-                    player = new Player(loadedName, Integer.parseInt(currency));
+					List<Boolean> items = convertStringToBooleanList(itemList);
+					player = new Player(loadedName, Integer.parseInt(currency), items);
                     logger.info(String.valueOf(player.getCurrency()));
                     bufferedWriter.write(loadedName);
                     bufferedWriter.newLine();
                     bufferedWriter.write(currency);
                     bufferedWriter.newLine();
-                    for (int i = 0; i < amountOfItems; i++) {
-                        bufferedWriter.write(bufferedReader.readLine());
-                        bufferedWriter.newLine();
-                    }
+					bufferedWriter.write(itemList);
+					bufferedWriter.newLine();
+
                     bufferedWriter.flush();
                     break;
                 }else {
@@ -582,8 +581,10 @@ public final class FileManager {
             bufferedWriter.write(String.valueOf(name));
             bufferedWriter.newLine();
             bufferedWriter.write("0");
-            bufferedWriter.newLine();
-        } catch (IOException e) {
+			bufferedWriter.newLine();
+			bufferedWriter.write("false, false, false");
+			bufferedWriter.newLine();
+		} catch (IOException e) {
             logger.warning("Failed to write new player data to file: " + e.getMessage());
             throw e; // Re-throw the exception after logging it.
         }
@@ -618,6 +619,7 @@ public final class FileManager {
         try (BufferedReader currentBufferedReader = Files.newBufferedReader(currentPlayerPath, StandardCharsets.UTF_8)) {
             String loadedName = currentBufferedReader.readLine();
             String currency = currentBufferedReader.readLine();
+			String itemList = currentBufferedReader.readLine();
 
             if (loadedName == null || currency == null) {
                 logger.warning("Invalid data in current player file");
@@ -625,9 +627,10 @@ public final class FileManager {
             }
 
             Player player = loadPlayer(loadedName.toCharArray());
+			List<Boolean> items = player.getItem();
             String inputStr = inputBuffer.toString().replace(
-                    loadedName + "\n" + player.getCurrency() + "\n",
-                    loadedName + "\n" + currency + "\n");
+                    loadedName + "\n" + player.getCurrency() + "\n" + items.get(0)+", "+items.get(1)+", "+items.get(2)+"\n",
+                    loadedName + "\n" + currency + "\n"+ itemList + "\n");
 
             try (BufferedWriter bufferedWriter = Files.newBufferedWriter(playerPath, StandardCharsets.UTF_8)) {
                 bufferedWriter.write(inputStr);
@@ -709,4 +712,15 @@ public final class FileManager {
 
         return currency;
     }
+
+	public static List<Boolean> convertStringToBooleanList(String input) {
+		String[] splitStrings = input.split(",");
+		List<Boolean> booleanList = new ArrayList<>();
+
+		for (String s : splitStrings) {
+			booleanList.add(Boolean.parseBoolean(s.trim()));
+		}
+
+		return booleanList;
+	}
 }

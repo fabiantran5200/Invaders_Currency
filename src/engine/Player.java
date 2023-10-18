@@ -1,5 +1,7 @@
 package engine;
 
+import java.util.List;
+
 /**
  * Implements a high currency record.
  * 
@@ -12,6 +14,8 @@ public class Player implements Comparable<Player> {
 	private String name;
 	/** currency points. */
 	private int currency;
+	/** item list */
+	private List<Boolean> item;
 
 	/**
 	 * Constructor.
@@ -21,9 +25,10 @@ public class Player implements Comparable<Player> {
 	 * @param currency
 	 *            Player currency.
 	 */
-	public Player(final String name, final int currency) {
+	public Player(final String name, final int currency, final List<Boolean> item) {
 		this.name = name;
 		this.currency = currency;
+		this.item = item;
 	}
 
 	/**
@@ -38,10 +43,14 @@ public class Player implements Comparable<Player> {
 	/**
 	 * Getter for the player's currency.
 	 * 
-	 * @return High currency.
+	 * @return currency.
 	 */
 	public final int getCurrency() {
 		return this.currency;
+	}
+
+	public final List<Boolean> getItem() {
+		return this.item;
 	}
 
 	public void setName(String name) {
@@ -50,6 +59,10 @@ public class Player implements Comparable<Player> {
 
 	public void setCurrency(int currency) {
 		this.currency = currency;
+	}
+
+	public void setItem(List<Boolean> item) {
+		this.item = item;
 	}
 
 	/**
