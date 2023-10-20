@@ -274,9 +274,14 @@ public final class DrawManager {
 	public void drawScore(final Screen screen, final int score, final int coin) {//TODO
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.setColor(Color.WHITE);
-		String scoreString = String.format("%04d", score);
-		String coinString = String.format("%04d", coin);//myupdate
-		backBufferGraphics.drawString(scoreString + "/ $" + coinString, screen.getWidth() - 120, 25);//myupdate
+		public void drawScore(final Screen screen, final int score, final int coin) {//TODO
+			backBufferGraphics.setFont(fontRegular);
+			backBufferGraphics.setColor(Color.WHITE);
+			String scoreString = String.format("%04d", score + coin * SCORE_COIN_RATE);
+			String coinString = String.format("%04d", coin);
+			backBufferGraphics.drawString(scoreString + "/ $" + coinString, screen.getWidth() - 120, 25);
+			backBufferGraphics.drawString(scoreString, screen.getWidth() - 60, 25);
+		}
 	}
 
 	/**
