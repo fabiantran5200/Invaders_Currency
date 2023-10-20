@@ -27,7 +27,7 @@ public class Score implements Comparable<Score> {
 		this.name = name;
 		this.score = score;
 	}
-
+// this code defines a class called "Score" that represents a player's score, name, and in-game currency
 	public Score(String name, int score, int coin) {
 		this.name = name;
 		this.score = score;
@@ -51,7 +51,7 @@ public class Score implements Comparable<Score> {
 	public final int getScore() {
 		return this.score;
 	}
-
+//This code is part of a class used for scoring in a game.
 	public final int getCoin() {
 		return this.coin;
 	}
