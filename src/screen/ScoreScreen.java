@@ -98,6 +98,11 @@ public class ScoreScreen extends Screen {
 		} catch (IOException e) {
 			logger.warning("Couldn't load high scores!");
 		}
+		try {
+			Core.getFileManager().resetPlayerItem();
+		} catch (IOException e){
+			logger.warning("Couldn't reset item!");
+		}
 	}
 
 	/**
@@ -131,7 +136,7 @@ public class ScoreScreen extends Screen {
 				saveScore(gameMode);
 			} else if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
 				// Play again.
-				this.returnCode = 2;
+				this.returnCode = 7;
 				this.isRunning = false;
 				saveScore(gameMode);
 			}
