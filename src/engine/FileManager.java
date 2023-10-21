@@ -514,12 +514,13 @@ public final class FileManager {
 		}
 	}
 
+	//loads player object by its name as a character and writes the player data in the currentPlayer text file
     public Player loadPlayer(char[] name) throws IOException {
 
         Player player = null;
 
         String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        jarPath = URLDecoder.decode(jarPath, "UTF-8");
+        jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
 
         String playerPath = new File(jarPath).getParent() + File.separator + "accounts";
         String currentPlayerPath = new File(jarPath).getParent() + File.separator + "currentPlayer";
@@ -566,11 +567,12 @@ public final class FileManager {
 
         return player;
     }
+	//new player is being created and being saved in accounts.txt
     public void saveNewPlayer(final char[] name) throws IOException {
         // Get the path to the JAR file.
         String jarPath = FileManager.class.getProtectionDomain()
                 .getCodeSource().getLocation().getPath();
-        jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8.toString());
+        jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
 
         // Construct the path to the player file.
         Path playerPath = Paths.get(new File(jarPath).getParent(), "accounts");
@@ -589,7 +591,7 @@ public final class FileManager {
 			bufferedWriter.newLine();
 			bufferedWriter.write("0");
 			bufferedWriter.newLine();
-			bufferedWriter.write(currentDate(name));
+			bufferedWriter.write(currentDate());
 			bufferedWriter.newLine();
             bufferedWriter.write("false, false, false");
             bufferedWriter.newLine();
@@ -605,7 +607,7 @@ public final class FileManager {
     public void updateAccounts() throws IOException {
         String jarPath = FileManager.class.getProtectionDomain()
                 .getCodeSource().getLocation().getPath();
-        jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8.toString());
+        jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
 
         Path playerPath = Paths.get(new File(jarPath).getParent(), "accounts");
 
@@ -657,10 +659,11 @@ public final class FileManager {
 		}
 	}
 
+	//update function for easier manipulation of currency of current player
     public void updateCurrencyOfCurrentPlayer(int difference) throws IOException {
         String jarPath = FileManager.class.getProtectionDomain()
                 .getCodeSource().getLocation().getPath();
-        jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8.toString());
+        jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
 
         Path playerPath = Paths.get(new File(jarPath).getParent(), "currentPlayer");
 
@@ -696,19 +699,17 @@ public final class FileManager {
         }
     }
 
-// Get the player current login time
-	public String currentDate(final char[] name) throws IOException {
-
-		// Write the new player data to the file.
+	//get the current login time
+	public String currentDate() throws IOException {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			return dateFormat.format(new Date());
-
 	}
-	//Logic for updating the login time of current player
+
+	//logic for updating the login time of current player
 	public void updateLoginTimeOfCurrentPlayer() throws IOException {
         String jarPath = FileManager.class.getProtectionDomain()
                 .getCodeSource().getLocation().getPath();
-        jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8.toString());
+        jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
 
         Path playerPath = Paths.get(new File(jarPath).getParent(), "currentPlayer");
 
@@ -757,6 +758,7 @@ public final class FileManager {
         }
     }
 
+	//converts a string of booleans in the form of "boolean, boolean..." to a list of booleans
 	public static List<Boolean> convertStringToBooleanList(String input) {
 		String[] splitStrings = input.split(",");
 		List<Boolean> booleanList = new ArrayList<>();
@@ -768,20 +770,12 @@ public final class FileManager {
 		return booleanList;
 	}
 
-	/**
-	 * Retrieves the current player's data from a file.
-	 *
-	 * @return The Player object representing the current player.
-	 * @throws IOException If there is an I/O error while reading the player data file.
-	 *                    This can occur if the file is not found or if its contents are invalid.
-	 * @throws FileNotFoundException If the player data file is not found.
-	 * @throws NumberFormatException If there is an issue with parsing a numeric value from the file.
-	 */
+	//retrieves the current player's data from the currentPlayer text file.
 	public Player getCurrentPlayer() throws IOException {
 		// Get the path to the JAR file
 		String jarPath = FileManager.class.getProtectionDomain()
 				.getCodeSource().getLocation().getPath();
-		jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8.toString());
+		jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
 
 		// Construct the path to the player data file
 		Path playerPath = Paths.get(new File(jarPath).getParent(), "currentPlayer");
