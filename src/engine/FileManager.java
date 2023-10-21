@@ -640,7 +640,7 @@ public final class FileManager {
 
             try (BufferedWriter bufferedWriter = Files.newBufferedWriter(playerPath, StandardCharsets.UTF_8)) {
                 bufferedWriter.write(inputStr);
-                logger.info("Successfully changed amount of player: " + loadedName + " to " + currency + "and" + loginTime);
+                logger.info("Successfully updated amount of player");
             } catch (IOException e) {
                 logger.warning("Failed to write updated player data to file: " + e.getMessage());
                 throw e;
