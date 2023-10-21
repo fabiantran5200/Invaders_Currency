@@ -63,28 +63,64 @@ public class ItemShopScreen extends Screen {
 				if (selectedItem == 0) {
 					itemPrice = 10;
 					try {
-						Core.getFileManager().updatePlayerItem(0);
-					} catch (IOException e){
+						if (Core.getFileManager().getCurrentPlayer().getItem().get(0) == true){
+							logger.info("Player already has the item");
+						} else if(Core.getFileManager().getCurrentPlayer().getCurrency()>=itemPrice){
+							try {
+								Core.getFileManager().updatePlayerItem(0);
+								Core.getFileManager().updateCurrencyOfCurrentPlayer(-itemPrice);
+							} catch (IOException e){
+								throw new RuntimeException(e);
+							}
+							logger.info("Player bought Speed item successfully");
+						} else {
+							logger.info("Player has Insufficient Balance");
+						}
+					} catch (IOException e) {
 						throw new RuntimeException(e);
 					}
-					logger.info("Player bought Speed item successfully");
 
 				} else if (selectedItem == 1) {
 					itemPrice = 15;
 					try {
-						Core.getFileManager().updatePlayerItem(1);
-					} catch (IOException e){
+						if (Core.getFileManager().getCurrentPlayer().getItem().get(1) == true) {
+							logger.info("Player already has the item");
+						} else if(Core.getFileManager().getCurrentPlayer().getCurrency()>=itemPrice){
+							try {
+								Core.getFileManager().updatePlayerItem(1);
+								Core.getFileManager().updateCurrencyOfCurrentPlayer(-itemPrice);
+							} catch (IOException e){
+								throw new RuntimeException(e);
+							}
+							logger.info("Player bought Additional Health item successfully");
+						} else {
+							logger.info("Player has Insufficient Balance");
+						}
+					} catch (IOException e) {
 						throw new RuntimeException(e);
 					}
-					logger.info("Player bought Additional Health item successfully");
+
+
 				} else if (selectedItem == 2) {
 					itemPrice = 20;
-					try{
-						Core.getFileManager().updatePlayerItem(2);
-					}catch (IOException e){
+					try {
+						if (Core.getFileManager().getCurrentPlayer().getItem().get(2) == true) {
+							logger.info("Player already has the item");
+						} else if(Core.getFileManager().getCurrentPlayer().getCurrency()>=itemPrice){
+							try {
+								Core.getFileManager().updatePlayerItem(2);
+								Core.getFileManager().updateCurrencyOfCurrentPlayer(-itemPrice);
+							} catch (IOException e){
+								throw new RuntimeException(e);
+							}
+							logger.info("Player bought Shooting Faster item successfully");
+						} else {
+							logger.info("Player has Insufficient Balance");
+						}
+					} catch (IOException e) {
 						throw new RuntimeException(e);
 					}
-					logger.info("Player bought Shooting Speed item successfully");
+
 				}
 				this.selectionCooldown.reset();
 

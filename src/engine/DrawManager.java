@@ -778,12 +778,17 @@ public final class DrawManager {
 
 		// The title/guide for the item shop:
 		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredBigString(screen, "Item Shop", screen.getHeight() / 8);
+		drawCenteredBigString(screen, "Item Shop", screen.getHeight() / 10);
 		backBufferGraphics.setColor(Color.GRAY);
-		drawCenteredRegularString(screen, "Buy Your Upgrades Here!", screen.getHeight() / 5);
+		drawCenteredRegularString(screen, "Buy Your Upgrades Here!", screen.getHeight() / 6);
 		backBufferGraphics.setColor(Color.GRAY);
 		drawCenteredRegularString(screen, "Press Space to Buy", screen.getHeight() / 4);
 		backBufferGraphics.setColor(Color.GRAY);
+		drawCenteredRegularString(screen, "*Player has the item already, Can't buy.*", screen.getHeight() / 5);
+		backBufferGraphics.setColor(Color.GRAY);
+		drawCenteredRegularString(screen, "Press Esc to Go to Menu", screen.getHeight() / 1);
+		backBufferGraphics.setColor(Color.GRAY);
+
 		try{
 			drawCenteredRegularString(screen, "Current credits : " + Core.getFileManager().getCurrentPlayer().getCurrency(), screen.getHeight() / 3);
 		}catch(IOException e){
