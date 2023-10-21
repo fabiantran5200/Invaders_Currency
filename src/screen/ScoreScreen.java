@@ -102,6 +102,11 @@ public class ScoreScreen extends Screen {
 		} catch (IOException e) {
 			logger.warning("Couldn't load high scores!");
 		}
+		try {
+			Core.getFileManager().resetPlayerItem();
+		} catch (IOException e){
+			logger.warning("Couldn't reset item!");
+		}
 	}
 
 	/**
@@ -178,6 +183,11 @@ public class ScoreScreen extends Screen {
 	 */
 	private void saveScore(final int gameMode) {
 		highScores.add(new Score(new String(this.name), score));
+		try{
+			Core.getFileManager().updateCurrencyOfCurrentPlayer(score/10);
+		} catch (IOException e){
+			throw new RuntimeException();
+		}
 		Collections.sort(highScores);
 		if (highScores.size() > MAX_HIGH_SCORE_NUM)
 			highScores.remove(highScores.size() - 1);
