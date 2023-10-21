@@ -65,12 +65,28 @@ public class ItemShopScreen extends Screen {
 				// Update currency and item based on the selected item
 				if (selectedItem == 0) {
 					itemPrice = 10;
+					try {
+						Core.getFileManager().updatePlayerItem(0);
+					} catch (IOException e){
+						throw new RuntimeException(e);
+					}
 					logger.info("Player bought Speed item successfully");
+
 				} else if (selectedItem == 1) {
 					itemPrice = 15;
+					try {
+						Core.getFileManager().updatePlayerItem(1);
+					} catch (IOException e){
+						throw new RuntimeException(e);
+					}
 					logger.info("Player bought Additional Health item successfully");
 				} else if (selectedItem == 2) {
 					itemPrice = 20;
+					try{
+						Core.getFileManager().updatePlayerItem(2);
+					}catch (IOException e){
+						throw new RuntimeException(e);
+					}
 					logger.info("Player bought Shooting Speed item successfully");
 				}
 

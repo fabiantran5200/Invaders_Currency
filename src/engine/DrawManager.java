@@ -783,6 +783,12 @@ public final class DrawManager {
 		drawCenteredRegularString(screen, "Buy Your Upgrades Here!", screen.getHeight() / 5);
 		backBufferGraphics.setColor(Color.GRAY);
 		drawCenteredRegularString(screen, "Press Space to Buy", screen.getHeight() / 4);
+		backBufferGraphics.setColor(Color.GRAY);
+		try{
+			drawCenteredRegularString(screen, "Current credits : " + Core.getFileManager().getCurrentPlayer().getCurrency(), screen.getHeight() / 3);
+		}catch(IOException e){
+			throw new RuntimeException(e);
+		}
 	}
 
 	// Helper method to draw centered text
