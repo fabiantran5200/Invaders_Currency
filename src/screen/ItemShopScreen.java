@@ -1,9 +1,6 @@
 package screen;
 
-import engine.Cooldown;
-import engine.Core;
-import engine.Player;
-import engine.Score;
+import engine.*;
 
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -19,7 +16,7 @@ import java.util.List;
 
 public class ItemShopScreen extends Screen {
 
-	private static final int SELECTION_TIME = 100;
+	private static final int SELECTION_TIME = 300;
 
 	public ItemShopScreen(final int width, final int height, final int fps) {
 		super(width, height, fps);
@@ -73,6 +70,7 @@ public class ItemShopScreen extends Screen {
 					itemPrice = 20;
 					logger.info("Player bought Shooting Speed item successfully");
 				}
+				this.selectionCooldown.reset();
 
 			}
 			if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)) {
