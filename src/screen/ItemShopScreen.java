@@ -21,7 +21,7 @@ public class ItemShopScreen extends Screen {
 	public ItemShopScreen(final int width, final int height, final int fps) {
 		super(width, height, fps);
 		//defaults to center
-		this.returnCode = 1;
+		this.returnCode = 71;
 		this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
 		this.selectionCooldown.reset();
 	}
@@ -60,7 +60,7 @@ public class ItemShopScreen extends Screen {
 				int itemPrice = 0;
 
 				// Update currency and item based on the selected item
-				if (selectedItem == 0) {
+				if (selectedItem == 70) {
 					itemPrice = 10;
 					try {
 						if (Core.getFileManager().getCurrentPlayer().getItem().get(0) == true){
@@ -80,7 +80,7 @@ public class ItemShopScreen extends Screen {
 						throw new RuntimeException(e);
 					}
 
-				} else if (selectedItem == 1) {
+				} else if (selectedItem == 71) {
 					itemPrice = 15;
 					try {
 						if (Core.getFileManager().getCurrentPlayer().getItem().get(1) == true) {
@@ -101,7 +101,7 @@ public class ItemShopScreen extends Screen {
 					}
 
 
-				} else if (selectedItem == 2) {
+				} else if (selectedItem == 72) {
 					itemPrice = 20;
 					try {
 						if (Core.getFileManager().getCurrentPlayer().getItem().get(2) == true) {
@@ -126,6 +126,7 @@ public class ItemShopScreen extends Screen {
 
 			}
 			if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)) {
+				this.returnCode = 1;
 				this.isRunning = false;
 			}
 		}
@@ -136,24 +137,24 @@ public class ItemShopScreen extends Screen {
 	 * Shifts the focus to the next menu item (horizontally).
 	 */
 	private void nextMenuItem() {
-		if (this.returnCode == 2)
-			this.returnCode = 0;
-		else if (this.returnCode == 0)
-			this.returnCode = 1;
-		else if (this.returnCode == 1)
-			this.returnCode = 2;
+		if (this.returnCode == 72)
+			this.returnCode = 70;
+		else if (this.returnCode == 70)
+			this.returnCode = 71;
+		else if (this.returnCode == 71)
+			this.returnCode = 72;
 	}
 
 	/**
 	 * Shifts the focus to the previous menu item (horizontally).
 	 */
 	private void previousMenuItem() {
-		if (this.returnCode == 0)
-			this.returnCode = 2;
-		else if (this.returnCode == 2)
-			this.returnCode = 1;
-		else if (this.returnCode == 1)
-			this.returnCode = 0;
+		if (this.returnCode == 70)
+			this.returnCode = 72;
+		else if (this.returnCode == 72)
+			this.returnCode = 71;
+		else if (this.returnCode == 71)
+			this.returnCode = 70;
 	}
 
 	/**

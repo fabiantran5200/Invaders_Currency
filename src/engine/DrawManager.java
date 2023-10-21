@@ -708,7 +708,7 @@ public final class DrawManager {
 	}
 
 	// Item Shop's Item holder
-	public void drawItemShopMenu(final Screen screen, final int selectedItem) {
+	public void drawItemShopMenu(final Screen screen,final int selectedItem) {
 		backBufferGraphics.setColor(Color.GREEN);
 		drawCenteredItemInfo(screen, "", screen.getHeight() / 8);
 
@@ -721,7 +721,7 @@ public final class DrawManager {
 
 		// Draw the first item
 		int itemX1 = startX;
-		if (selectedItem == 0) {
+		if (selectedItem == 70) {
 			backBufferGraphics.setColor(Color.GREEN);
 		} else {
 			backBufferGraphics.setColor(Color.LIGHT_GRAY);
@@ -740,7 +740,7 @@ public final class DrawManager {
 
 		// Draw the second item
 		int itemX2 = startX + itemWidth + spacing;
-		if (selectedItem == 1) {
+		if (selectedItem == 71) {
 			backBufferGraphics.setColor(Color.GREEN);
 		} else {
 			backBufferGraphics.setColor(Color.LIGHT_GRAY);
@@ -759,7 +759,7 @@ public final class DrawManager {
 
 		// Draw the third item
 		int itemX3 = startX + 2 * (itemWidth + spacing);
-		if (selectedItem == 2) {
+		if (selectedItem == 72) {
 			backBufferGraphics.setColor(Color.GREEN);
 		} else {
 			backBufferGraphics.setColor(Color.LIGHT_GRAY);
