@@ -784,7 +784,7 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.GRAY);
 		drawCenteredRegularString(screen, "Press Space to Buy", screen.getHeight() / 4);
 		backBufferGraphics.setColor(Color.GRAY);
-		drawCenteredRegularString(screen, "*Player has the item already, Can't buy.*", screen.getHeight() / 5);
+		drawCenteredRegularString(screen, "*If Player has the item already, Can't buy.*", screen.getHeight() / 5);
 		backBufferGraphics.setColor(Color.GRAY);
 		drawCenteredRegularString(screen, "Press Esc to Go to Menu", screen.getHeight() / 1);
 		backBufferGraphics.setColor(Color.GRAY);
