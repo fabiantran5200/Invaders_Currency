@@ -28,8 +28,7 @@ public class SoundManager {
     private static final float one = ((Math.abs(minimum)+Math.abs(maximum))/100);
     private static float master = getValue(masterVolume);
 
-    public static void playSound(String soundFilePathShort, String clipName, boolean isLoop, boolean isBgm) {
-        String soundFilePath = "src/main/resources/sound/"+soundFilePathShort+".wav";
+    public static void playSound(String soundFilePathShort, String clipName, boolean isLoop, boolean isBgm) {         String soundFilePath = "src/main/resources/sound/"+soundFilePathShort+".wav";
         Clip clip = clips.get(clipName);
         if (clip != null && clip.isActive()) {
             return;
