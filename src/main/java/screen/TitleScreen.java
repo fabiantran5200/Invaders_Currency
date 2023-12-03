@@ -83,9 +83,11 @@ public class TitleScreen extends Screen {
 	 */
 	private void nextMenuItem() {
 		if (this.returnCode == 6)
-			this.returnCode = 0;
+			this.returnCode = 9;
 		else if (this.returnCode == 0)
 			this.returnCode = 2;
+		else if (this.returnCode == 9)
+			this.returnCode = 0;
 		else
 			this.returnCode++;
 	}
@@ -95,9 +97,13 @@ public class TitleScreen extends Screen {
 	 */
 	private void previousMenuItem() {
 		if (this.returnCode == 0)
-			this.returnCode = 6;
+			this.returnCode = 9;
 		else if (this.returnCode == 2)
 			this.returnCode = 0;
+		else if (this.returnCode == 9)
+			this.returnCode = 6;
+		else if (this.returnCode == 2)
+			this.returnCode = 9;
 		else
 			this.returnCode--;
 	}
