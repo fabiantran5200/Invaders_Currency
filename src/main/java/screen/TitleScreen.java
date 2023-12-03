@@ -74,6 +74,12 @@ public class TitleScreen extends Screen {
 			if (inputManager.isKeyDown(KeyEvent.VK_SPACE)){
 				SoundManager.playSound("SFX/S_MenuClick", "menu_select", false, false);
 				this.isRunning = false;
+				try {
+					//Delay because of a bug
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

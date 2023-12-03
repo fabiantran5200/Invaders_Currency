@@ -319,15 +319,13 @@ public final class Core {
 				break;
 			case 9:
 				// Open Twitter.com
-				currentScreen = new TitleScreen(width, height, FPS);
 				try {
 					java.awt.Desktop.getDesktop().browse(java.net.URI.create("https://twitter.com/TaitoCorp/status/1709286193555452063"));
 					LOGGER.info("Opening twitter.com");
 				} catch (Exception e) {
 					LOGGER.severe("Could not open twitter.com: " + e.getMessage());
 				}
-
-				returnCode = frame.setScreen(currentScreen);
+				returnCode = 1;
 				break;
 
 				default:
