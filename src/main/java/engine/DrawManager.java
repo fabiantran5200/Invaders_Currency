@@ -855,6 +855,7 @@ public final class DrawManager {
 	 */
 
 	public void drawStoryScreen(final Screen screen) {
+		SoundManager.playSound("BGM/StoryScreen", "story", true, true, 2f);
 		// Set background color
 		backBufferGraphics.setColor(Color.BLACK);
 
