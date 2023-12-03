@@ -317,6 +317,16 @@ public final class Core {
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing SkinSelection screen.");
 				break;
+			case 9:
+				// Open Twitter.com
+				try {
+					java.awt.Desktop.getDesktop().browse(java.net.URI.create("https://twitter.com/TaitoCorp/status/1709286193555452063"));
+					LOGGER.info("Opening twitter.com");
+				} catch (Exception e) {
+					LOGGER.severe("Could not open twitter.com: " + e.getMessage());
+				}
+				returnCode = 1;
+				break;
 			case 10:
 				currentScreen = new StoryScreen(width,height,FPS);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
@@ -326,7 +336,6 @@ public final class Core {
 				break;
 			default:
 				break;
-
 			}
 
 		} while (returnCode != 0);
