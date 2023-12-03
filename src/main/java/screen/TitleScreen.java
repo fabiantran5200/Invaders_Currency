@@ -74,6 +74,12 @@ public class TitleScreen extends Screen {
 			if (inputManager.isKeyDown(KeyEvent.VK_SPACE)){
 				SoundManager.playSound("SFX/S_MenuClick", "menu_select", false, false);
 				this.isRunning = false;
+				try {
+					//Delay because of a bug
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -83,9 +89,11 @@ public class TitleScreen extends Screen {
 	 */
 	private void nextMenuItem() {
 		if (this.returnCode == 6)
-			this.returnCode = 0;
+			this.returnCode = 9;
 		else if (this.returnCode == 0)
 			this.returnCode = 2;
+		else if (this.returnCode == 9)
+			this.returnCode = 0;
 		else
 			this.returnCode++;
 	}
@@ -95,9 +103,13 @@ public class TitleScreen extends Screen {
 	 */
 	private void previousMenuItem() {
 		if (this.returnCode == 0)
-			this.returnCode = 6;
+			this.returnCode = 9;
 		else if (this.returnCode == 2)
 			this.returnCode = 0;
+		else if (this.returnCode == 9)
+			this.returnCode = 6;
+		else if (this.returnCode == 2)
+			this.returnCode = 9;
 		else
 			this.returnCode--;
 	}
