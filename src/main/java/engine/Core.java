@@ -327,8 +327,14 @@ public final class Core {
 				}
 				returnCode = 1;
 				break;
-
-				default:
+			case 10:
+				currentScreen = new StoryScreen(width,height,FPS);
+				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+						+ " Story screen at " + FPS + " fps.");
+				returnCode = frame.setScreen(currentScreen);
+				LOGGER.info("Closing Story screen.");
+				break;
+			default:
 				break;
 			}
 
